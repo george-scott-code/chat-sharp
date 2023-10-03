@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 
 Console.WriteLine("Hello, World!");
-IPHostEntry ipHostInfo = await Dns.GetHostEntryAsync("host.contoso.com");
+IPHostEntry ipHostInfo = await Dns.GetHostEntryAsync("localhost");
 IPAddress ipAddress = ipHostInfo.AddressList[0];
 IPEndPoint ipEndPoint = new(ipAddress, 11_000);
 
@@ -31,4 +31,13 @@ while (true)
             $"Socket server recieved message: {response.Replace(eom, string.Empty)}"
         );
     }
+
+    // Send acknowledgment
+    var ackMessage = "<|ACK|>";
+    var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
+    await handler.SendAsync(echoBytes, 0);
+    System.Console.WriteLine(
+        $"Socket server sent acknowledgment: {ackMessage}"
+    );
+    break;
 }
