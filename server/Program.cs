@@ -24,20 +24,18 @@ while (true)
     var received = await handler.ReceiveAsync(buffer, SocketFlags.None); 
     var response = Encoding.UTF8.GetString(buffer, 0, received);
 
-    var eom = "<|EOM|>";
-    if (response.IndexOf(eom) > -1) // is end of message
+    if (response.IndexOf(MessageDelimeters.END_OF_MESSAGE) > -1) // is end of message
     {
         System.Console.WriteLine(
-            $"Socket server recieved message: {response.Replace(eom, string.Empty)}"
+            $"Socket server recieved message: {response.Replace(MessageDelimeters.END_OF_MESSAGE, string.Empty)}"
         );
     }
 
     // Send acknowledgment
-    var ackMessage = "<|ACK|>";
-    var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
+    var echoBytes = Encoding.UTF8.GetBytes(MessageDelimeters.ACK_MESSAGE);
     await handler.SendAsync(echoBytes, 0);
     System.Console.WriteLine(
-        $"Socket server sent acknowledgment: {ackMessage}"
+        $"Socket server sent acknowledgment: {MessageDelimeters.ACK_MESSAGE}"
     );
     break;
 }
