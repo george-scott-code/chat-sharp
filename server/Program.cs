@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using shared;
 
 Console.WriteLine("Hello, World!");
 IPHostEntry ipHostInfo = await Dns.GetHostEntryAsync("localhost");
