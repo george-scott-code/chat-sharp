@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using shared;
 
 Console.WriteLine("Hello, World!");
 
@@ -18,7 +19,7 @@ await client.ConnectAsync(ipEndPoint);
 while (true)
 {
     // Send message
-    var message = "Hi friends 👋!<|EOM|>";
+    var message = $"Hi friends 👋!{MessageDelimeters.END_OF_MESSAGE}";
     var messageBytes = Encoding.UTF8.GetBytes(message);
 
     _ = await client.SendAsync(messageBytes, SocketFlags.None);
@@ -28,7 +29,7 @@ while (true)
     var buffer = new byte[1_024];
     var received = await client.ReceiveAsync(buffer, SocketFlags.None);
     var response = Encoding.UTF8.GetString(buffer, 0, received);
-    if(response == "<|ACK|>")
+    if(response == MessageDelimeters.ACK_MESSAGE)
     {
         System.Console.WriteLine($"Socket client recieved acknowledgment: {response}");
         break;
