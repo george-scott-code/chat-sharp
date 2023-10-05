@@ -34,7 +34,11 @@ while (true)
         System.Console.WriteLine($"Socket client recieved acknowledgment: {response}");
         break;
     }
-    System.Console.WriteLine("no acknowledgment received");
+    else
+    {
+        System.Console.WriteLine("no acknowledgment received");
+    }
 }
 
-client.Shutdown(SocketShutdown.Both);
+client.Shutdown(SocketShutdown.Receive);
+client.Close();
