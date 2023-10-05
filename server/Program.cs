@@ -40,3 +40,4 @@ while (true)
     );
     break;
 }
+listener.Close();
