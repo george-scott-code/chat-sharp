@@ -17,9 +17,10 @@ using Socket listener = new(
 listener.Bind(ipEndPoint);
 listener.Listen(100);
 
-var handler = await listener.AcceptAsync();
 while (true)
 {
+    var handler = await listener.AcceptAsync();
+
     // Receive message.
     var buffer = new byte[1_024];
     var received = await handler.ReceiveAsync(buffer, SocketFlags.None); 
@@ -35,9 +36,11 @@ while (true)
     // Send acknowledgment
     var echoBytes = Encoding.UTF8.GetBytes(MessageDelimeters.ACK_MESSAGE);
     await handler.SendAsync(echoBytes, 0);
+    handler.Shutdown(SocketShutdown.Both);
+    handler.Close();
     System.Console.WriteLine(
         $"Socket server sent acknowledgment: {MessageDelimeters.ACK_MESSAGE}"
     );
-    break;
+    //break;
 }
 listener.Close();
