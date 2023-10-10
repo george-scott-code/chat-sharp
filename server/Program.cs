@@ -1,4 +1,4 @@
-// See https://aka.ms/new-console-template for more information
+﻿// See https://aka.ms/new-console-template for more information
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -17,9 +17,9 @@ using Socket listener = new(
 listener.Bind(ipEndPoint);
 listener.Listen(100);
 
-var ttl = TimeSpan.FromMinutes(5);
-var lastMessageTime = DateTime.Now;
-while (DateTime.Now.Subtract(lastMessageTime) < ttl)
+var ttl = TimeSpan.FromMinutes(1);
+var startTime = DateTime.Now;
+while (DateTime.Now.Subtract(startTime) < ttl)
 {
     var handler = await listener.AcceptAsync();
 
@@ -43,7 +43,6 @@ while (DateTime.Now.Subtract(lastMessageTime) < ttl)
     System.Console.WriteLine(
         $"Socket server sent acknowledgment: {MessageDelimeters.ACK_MESSAGE}"
     );
-    lastMessageTime = DateTime.Now;
 }
 System.Console.WriteLine("Closing server");
 listener.Shutdown(SocketShutdown.Both);
