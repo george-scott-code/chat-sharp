@@ -17,7 +17,9 @@ using Socket listener = new(
 listener.Bind(ipEndPoint);
 listener.Listen(100);
 
-while (true)
+var ttl = TimeSpan.FromMinutes(5);
+var lastMessageTime = DateTime.Now;
+while (DateTime.Now.Subtract(lastMessageTime) < ttl)
 {
     var handler = await listener.AcceptAsync();
 
@@ -26,7 +28,7 @@ while (true)
     var received = await handler.ReceiveAsync(buffer, SocketFlags.None); 
     var response = Encoding.UTF8.GetString(buffer, 0, received);
 
-    if (response.IndexOf(MessageDelimeters.END_OF_MESSAGE) > -1) // is end of message
+    if (response.IndexOf(MessageDelimeters.END_OF_MESSAGE) > -1)
     {
         System.Console.WriteLine(
             $"Socket server recieved message: {response.Replace(MessageDelimeters.END_OF_MESSAGE, string.Empty)}"
@@ -41,6 +43,8 @@ while (true)
     System.Console.WriteLine(
         $"Socket server sent acknowledgment: {MessageDelimeters.ACK_MESSAGE}"
     );
-    //break;
+    lastMessageTime = DateTime.Now;
 }
 listener.Close();
+// listener.Shutdown(SocketShutdown.Both);
+// https://stackoverflow.com/questions/177856/how-do-i-trap-ctrlc-sigint-in-a-c-sharp-console-app
