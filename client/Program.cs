@@ -16,27 +16,34 @@ using Socket client = new(
     ProtocolType.Tcp);
 
 await client.ConnectAsync(ipEndPoint);
+string? message = string.Empty;
 while (true)
 {
     // Send message
-    var message = $"Hi friends 👋!{MessageDelimeters.END_OF_MESSAGE}";
-    var messageBytes = Encoding.UTF8.GetBytes(message);
-
-    _ = await client.SendAsync(messageBytes, SocketFlags.None);
-    System.Console.WriteLine($"Socket client sent message {message}");
-    
-    // Recieve acknoeldgment
-    var buffer = new byte[1_024];
-    var received = await client.ReceiveAsync(buffer, SocketFlags.None);
-    var response = Encoding.UTF8.GetString(buffer, 0, received);
-    if(response == MessageDelimeters.ACK_MESSAGE)
+    message = Console.ReadLine();
+    if(message == "q")
     {
-        System.Console.WriteLine($"Socket client recieved acknowledgment: {response}");
         break;
     }
-    else
+    if (message != null)
     {
-        System.Console.WriteLine("no acknowledgment received");
+        var messageBytes = Encoding.UTF8.GetBytes($"{message}{MessageDelimeters.END_OF_MESSAGE}");
+
+        _ = await client.SendAsync(messageBytes, SocketFlags.None);
+        System.Console.WriteLine($"Socket client sent message {message}");
+        
+        // Recieve acknowledgment
+        var buffer = new byte[1_024];
+        var received = await client.ReceiveAsync(buffer, SocketFlags.None);
+        var response = Encoding.UTF8.GetString(buffer, 0, received);
+        if(response == MessageDelimeters.ACK_MESSAGE)
+        {
+            System.Console.WriteLine($"Socket client recieved acknowledgment: {response}");
+        }
+        else
+        {
+            System.Console.WriteLine("no acknowledgment received");
+        }
     }
 }
 
