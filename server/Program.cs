@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -45,6 +45,7 @@ while (DateTime.Now.Subtract(lastMessageTime) < ttl)
     );
     lastMessageTime = DateTime.Now;
 }
+System.Console.WriteLine("Closing server");
+listener.Shutdown(SocketShutdown.Both);
 listener.Close();
-// listener.Shutdown(SocketShutdown.Both);
 // https://stackoverflow.com/questions/177856/how-do-i-trap-ctrlc-sigint-in-a-c-sharp-console-app
