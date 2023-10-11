@@ -1,10 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection.Metadata;
 using System.Text;
-using System.Collections.Concurrent;
 using shared;
 
 Console.WriteLine("Hello, World!");
@@ -49,16 +47,3 @@ handler.Close();
 System.Console.WriteLine("Closing server");
 listener.Shutdown(SocketShutdown.Both);
 listener.Close();
-// https://stackoverflow.com/questions/177856/how-do-i-trap-ctrlc-sigint-in-a-c-sharp-console-app
-
-//TODO:
-public class Server
-{
-    // access from multiple threads
-    ConcurrentBag<User> users = new ();
-}
-
-public class User
-{
-    // user details
-}
